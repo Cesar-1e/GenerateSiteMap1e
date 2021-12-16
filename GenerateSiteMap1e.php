@@ -7,7 +7,7 @@ class GenerateSiteMap1e{
     public function __construct($route = null)
     {
         if(is_null($route)){
-            $route = dirname(dirname(__FILE__)) . "/" . "sitemap.xml";
+            $route = dirname(dirname(__FILE__)) . "/localhost/" . "sitemap.xml";
         }
         $this->open($route);
     }
@@ -21,7 +21,18 @@ class GenerateSiteMap1e{
     }
     
     private function open($route){
+        //Obtenemos el contenido
+        $xml = file_get_contents($route);
+        if($xml != "" && $xml !== false){
+            $xml = simplexml_load_string($xml, "SimpleXMLElement", LIBXML_NOCDATA);
+            $json = json_encode($xml);
+            $this->urls = json_decode($json,TRUE);
+        }
+
         $this->file = fopen($route, "w");
+        if($this->file === false){
+            throw new Exception('No pudimos abrir el archivo: ' . $route);
+        }
     }
 
     public function addUrl($loc, $lastmod = null){
@@ -54,4 +65,3 @@ class GenerateSiteMap1e{
         fclose($this->file);
     }
 }
-?>
