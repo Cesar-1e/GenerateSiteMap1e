@@ -7,7 +7,7 @@ class GenerateSiteMap1e{
     public function __construct($route = null)
     {
         if(is_null($route)){
-            $route = dirname(dirname(__FILE__)) . "/localhost/" . "sitemap.xml";
+            $route = dirname(dirname(__FILE__)) . "/GenerateSiteMap1e/" . "sitemap.xml";
         }
         $this->open($route);
     }
@@ -26,7 +26,7 @@ class GenerateSiteMap1e{
         if($xml != "" && $xml !== false){
             $xml = simplexml_load_string($xml, "SimpleXMLElement", LIBXML_NOCDATA);
             $json = json_encode($xml);
-            $this->urls = json_decode($json,TRUE);
+            $this->urls = json_decode($json,TRUE)["url"];
         }
 
         $this->file = fopen($route, "w");
