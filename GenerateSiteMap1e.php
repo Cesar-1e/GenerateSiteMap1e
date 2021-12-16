@@ -4,8 +4,11 @@ class GenerateSiteMap1e{
     private $urls = array();
     private $xmlns = "http://www.sitemaps.org/schemas/sitemap/0.9";
 
-    public function __construct($route = "sitemap.xml")
+    public function __construct($route = null)
     {
+        if(is_null($route)){
+            $route = dirname(dirname(__FILE__)) . "/" . "sitemap.xml";
+        }
         $this->open($route);
     }
 
@@ -18,7 +21,7 @@ class GenerateSiteMap1e{
     }
     
     private function open($route){
-        $this->file = fopen($route, "w+");
+        $this->file = fopen($route, "w");
     }
 
     public function addUrl($loc, $lastmod = null){
@@ -33,14 +36,14 @@ class GenerateSiteMap1e{
 
     public function save(){
         $header = '<?xml version="1.0" encoding="UTF-8"?>
-        <urlset xmlns="' . $this->xmlns . '>';
+        <urlset xmlns="' . $this->xmlns . '">';
         $body = '';
         foreach ($this->urls as $url) {
-            $body += '<url>';
+            $body .= '<url>';
             foreach ($url as $key => $value) {
-                $body += '<' . $key . '>' . $value . '</' . $key . '>';
+                $body .= '<' . $key . '>' . $value . '</' . $key . '>';
             }
-            $body += '</url>';
+            $body .= '</url>';
         }
         $footer = '</urlset>';
         fwrite($this->file, $header . $body . $footer);
