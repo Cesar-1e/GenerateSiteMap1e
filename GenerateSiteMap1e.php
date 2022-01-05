@@ -7,7 +7,7 @@ class GenerateSiteMap1e{
     public function __construct($route = null)
     {
         if(is_null($route)){
-            $route = dirname(dirname(__FILE__)) . "/GenerateSiteMap1e/" . "sitemap.xml";
+            $route = dirname(dirname(__FILE__)) . "/sitemap.xml";
         }
         $this->open($route);
     }
@@ -29,7 +29,7 @@ class GenerateSiteMap1e{
             $this->urls = json_decode($json,TRUE)["url"];
         }
 
-        $this->file = fopen($route, "w");
+        $this->file = fopen($route, "w+");
         if($this->file === false){
             throw new Exception('No pudimos abrir el archivo: ' . $route);
         }
@@ -43,6 +43,21 @@ class GenerateSiteMap1e{
             'loc' => $loc,
             'lastmod' => $lastmod
         );
+    }
+
+    public function updateUrl($previousLoc, $nextLoc){
+        $key = array_search($previousLoc, array_column($this->urls, 'loc'));
+        if($key !== false){
+            $this->urls[$key] = array(
+                'loc' => $nextLoc,
+                'lastmod' => date('Y-m-d')
+            );
+        }
+    }
+
+    public function deleteUrl($loc){
+        $key = array_search($loc, array_column($this->urls, 'loc'));
+        unset($this->urls[$key]);
     }
 
     public function save(){
