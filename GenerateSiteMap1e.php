@@ -4,6 +4,7 @@ class GenerateSiteMap1e
     private $file = null;
     private $urls = array();
     private $xmlns = "http://www.sitemaps.org/schemas/sitemap/0.9";
+    private $version = "1.9";
 
     public function __construct($route = null)
     {
